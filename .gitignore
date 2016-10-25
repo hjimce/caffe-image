@@ -58,6 +58,7 @@ log/
 .JPEG
 .png
 hair/
+.idea/
 
 
 # Specified for project
