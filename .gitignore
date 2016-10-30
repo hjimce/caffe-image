@@ -60,6 +60,10 @@ log/
 hair/
 .idea/
 *.mdb
+*.JPG
+*.prototxt
+*.binaryproto
+*.caffemodel
 
 
 # Specified for project
