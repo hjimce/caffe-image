@@ -8,7 +8,8 @@ import operator
 import ntpath
 import pickle
 def main(files):
-    deleteline(files[0])
+    for f in files:
+        deleteline(f)
     plt.style.use('ggplot')
     fig, ax1 = plt.subplots()
     ax2 = ax1.twinx()
@@ -26,12 +27,12 @@ def main(files):
         disp_results(fig, ax1, ax2, loss_iterations, losses, accuracy_iterations, accuracies, accuracies_iteration_checkpoints_ind, fileName, color_ind=i+2)
     plt.show()
 
-def deleteline(log_file,substr='blocking_queue.cpp'):
+def deleteline(log_file,substr=['blocking_queue.cpp','net.cpp']):
     print log_file
     lines=[]
     with open(log_file, 'r') as f:
         for l in f.readlines():
-            if substr in l:
+            if substr[0] in l or substr[1] in l:
                 continue
             lines.append(l)
     print lines
@@ -113,7 +114,7 @@ def disp_results(fig, ax1, ax2, loss_iterations, losses, accuracy_iterations, ac
     plt.legend(loc='lower right')
 
 
-main(['hair/train/log.txt'])
+main(['log.txt','log_without_transfer.txt'])
 
 #main(['log_old.txt'])
 

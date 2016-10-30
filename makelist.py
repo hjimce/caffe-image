@@ -32,7 +32,7 @@ def GetFileList(FindPath,FlagStr=[]):
 
 	return FileList
 
-def spiltdata(path_root,valratio=0.05):
+def spiltdata(path_root,valratio=0.035):
 	classify_temp=os.listdir(path_root)
 	classify_file=[]
 	for c in classify_temp:
@@ -88,9 +88,9 @@ def writetrainlist(path_root):
 
 
 
-#spiltdata('hair/data')
-writetrainlist('hair/data/train')
-writetrainlist('hair/data/val')
+#spiltdata('race/data')
+writetrainlist('race/data/train')
+writetrainlist('race/data/val')
 
 
 

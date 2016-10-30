@@ -2,8 +2,8 @@
 # Create the imagenet lmdb inputs
 # N.B. set the path to the imagenet train + val data dirs
 
-OUT=./hair/lmdb
-DATA=./hair/data
+OUT=./race/lmdb
+DATA=./race/data
 
 RESIZE_HEIGHT=90
 RESIZE_WIDTH=90
