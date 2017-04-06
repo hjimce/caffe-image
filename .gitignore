@@ -64,6 +64,7 @@ hair/
 *.prototxt
 *.binaryproto
 *.caffemodel
+mouth/
 
 
 # Specified for project

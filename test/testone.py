@@ -2,7 +2,7 @@
 import os
 from matplotlib import pyplot as plt
 import shutil
-caffe_root = '/home/hjimce/tools/caffe/'
+caffe_root = '/home/hjimce/tools/caffe-quantization/'
 import sys
 sys.path.insert(0, caffe_root + 'python')
 import caffe
@@ -49,6 +49,29 @@ def getface(imgpath,cropimgname):
 	cv2.imwrite(cropimgname,img0)
 
 	return  True
+def predict(model,imgpaths,bbox=None):
+
+	result=[]
+	gender_listc=['black','brown','white','yellow']
+	#gender_listc=['黑种人','棕种人','白种人','黄种人']
+	for i,imgpath in enumerate(imgpaths):
+		cropimgname='crop//'+os.path.basename(imgpath)
+		if getface(imgpath,cropimgname)==False:
+			result.append([None,None,cropimgname])
+		else:
+			t0 = time.clock()
+			input_image = caffe.io.load_image(cropimgname)
+			prediction_gender=model.predict([input_image],True)
+			print (time.clock()-t0)*1000
+			propra={}
+			for i in range(len(gender_listc)):
+				propra[gender_listc[i]]=int(prediction_gender[0][i]*100)
+			propra= sorted(propra.iteritems(), key=lambda d:d[1],reverse=True)#字典根据值排序
+			prostr=''
+			for key in propra:
+				prostr=prostr+'\t'+key[0]+':'+str(key[1])+'%'+'\t'
+			result.append([propra[0][0],prostr,cropimgname])
+	return  result
 #加载训练好的模型
 def loadmodel(mean_filename="mean.binaryproto",pretrained_model='train.caffemodel',network='deploy.prototxt',size=256):
 
@@ -93,7 +116,7 @@ def accurate(filepatht='stdtest'):
 def batchclassify(filepath='test'):
 	pickfile=filepath+'pick'
 	os.mkdir(pickfile)
-	model=loadmodel()
+	model=loadmodel('race/newaccuracy90.2866/mean.binaryproto','race/newaccuracy90.2866/train.caffemodel','race/newaccuracy90.2866/deploy.prototxt',90)
 	imglists=os.listdir(filepath)
 	count=0
 	for imgpath in imglists:
@@ -103,38 +126,46 @@ def batchclassify(filepath='test'):
 			if os.path.exists(newpath) is False:
 				os.mkdir(newpath)
 			newname=newpath+'/'+imgpath
-			shutil.copy(cropimg,newname)
+			shutil.copy(filepath+'/'+imgpath,newname)
 		else:
 			print 'detect no face'
 def testonefile(dataroot='testimage'):
 	listc=['black','brown','white','yellow']
 	listcnew=['yellow','black','white','brown']
 	pickfile=dataroot+'pick'
+	if os.path.exists(pickfile):
+		shutil.rmtree(pickfile)
 	for l in listc:
 		os.makedirs(os.path.join(pickfile,l))
 	imglists=os.listdir(dataroot)
-	model_old=loadmodel('race/oldversion/mean.binaryproto','race/oldversion/train.caffemodel','race/oldversion/deploy.prototxt',256)
-	model_new=loadmodel('race/newaccuracy93.5/t.binaryproto','race/newaccuracy93.5/t.caffemodel','race/newaccuracy93.5/deploy.prototxt',90)
+	#model_old=loadmodel('race/oldversion/mean.binaryproto','race/oldversion/train.caffemodel','race/oldversion/deploy.prototxt',256)
+	#model_new=loadmodel('race/newaccuracy90.2866/mean.binaryproto','race/newaccuracy90.2866/train.caffemodel','race/newaccuracy90.2866/deploy.prototxt',90)
+	model_new=loadmodel('race/quantization/mean.binaryproto','race/quantization/train.caffemodel','race/quantization/quantized.prototxt',90)
+	avgtime=0
 	for imgpath in imglists:
 		getface(os.path.join(dataroot,imgpath),'1.jpg')
 		input_image = caffe.io.load_image('1.jpg')
-		prediction_old=model_old.predict([input_image],False)
-		maxpro_old=listc[prediction_old[0].argmax()]
-
+		t0 = time.clock()
+		#prediction_old=model_old.predict([input_image],False)
+		#maxpro_old=listc[prediction_old[0].argmax()]
+		#print "old time:",(time.clock()-t0)*1000
+		t0 = time.clock()
 		prediction_new=model_new.predict([input_image],False)
 		maxpro_new=listcnew[prediction_new[0].argmax()]
-		if maxpro_old!=maxpro_new:
+		print "new time:",(time.clock()-t0)*1000
+		avgtime+=(time.clock()-t0)*1000
+		'''if maxpro_old!=maxpro_new:
 			resized_image = cv2.resize(cv2.imread('1.jpg'), (500, 500))
 			cv2.imshow('old:'+maxpro_old+'\t'+'new:'+maxpro_new,resized_image)
 			cv2.moveWindow('pre:', 100, 100)
 			cv2.waitKey(0)
 
+			newpath=pickfile+'/'+imgpath+'_old_'+maxpro_old+'.jpg'
+			shutil.copy(os.path.join(dataroot,imgpath),newpath)
+			newpath=pickfile+'/'+imgpath+'_new_'+maxpro_new+'.jpg'
+			shutil.copy(os.path.join(dataroot,imgpath),newpath)'''
+	print avgtime/len(imglists)
 
-
-
-
-		'''newpath=pickfile+'/'+maxpro+'/'+imgpath
-		shutil.copy(os.path.join(dataroot,imgpath),newpath)'''
 
 
 
@@ -164,9 +195,9 @@ def testonefile(dataroot='testimage'):
 
 
 #predict('1.jpg')
-#batchclassify()
+batchclassify('photo_04_15224')
 #accurate()
-testonefile()
+#testonefile()
 
 
 

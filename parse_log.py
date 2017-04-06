@@ -114,7 +114,7 @@ def disp_results(fig, ax1, ax2, loss_iterations, losses, accuracy_iterations, ac
     plt.legend(loc='lower right')
 
 
-main(['log.txt','log_without_transfer.txt'])
+main(['log_sequeeze.txt','log.txt'])
 
 #main(['log_old.txt'])
 

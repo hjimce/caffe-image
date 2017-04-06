@@ -12,7 +12,6 @@ layers {
   transform_param {
     crop_size: 76
     mirror: true
-    mean_file:"imagenet_mean.binaryproto"
 
   }
   include: { phase: TRAIN }
@@ -30,7 +29,6 @@ layers {
   transform_param {
     crop_size: 76
     mirror: false
-    mean_file:"imagenet_mean.binaryproto"
   }
   include: { phase: TEST }
 }
