@@ -12,8 +12,6 @@ layers {
   transform_param {
     crop_size: 39
     mirror: true
-    mean_file:"../lmdb/imagenet_mean.binaryproto"
-
   }
   include: { phase: TRAIN }
 }
@@ -30,7 +28,6 @@ layers {
   transform_param {
     crop_size: 39
     mirror: false
-    mean_file:"../lmdb/imagenet_mean.binaryproto"
   }
   include: { phase: TEST }
 }
@@ -44,11 +41,11 @@ layers {
   weight_decay: 1
   weight_decay: 0
   convolution_param {
-    num_output: 20
-    kernel_size: 4
+    num_output: 16
+    kernel_size: 3
     weight_filler {
       type: "gaussian"
-      std: 0.01
+      std: 0.1
     }
     bias_filler {
       type: "constant"
@@ -73,21 +70,52 @@ layers {
     stride: 2
   }
 }
+
+layers {
+  name: "conv1_squeeze"
+  type: CONVOLUTION
+  bottom: "pool1"
+  top: "conv1_squeeze"
+  blobs_lr: 1
+  blobs_lr: 2
+  weight_decay: 1
+  weight_decay: 0
+  convolution_param {
+    num_output: 8
+    kernel_size: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.1
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layers {
+  name: "relu1_squeeze"
+  type: RELU
+  bottom: "conv1_squeeze"
+  top: "conv1_squeeze"
+}
+
+
 layers {
   name: "conv2"
   type: CONVOLUTION
-  bottom: "pool1"
+  bottom: "conv1_squeeze"
   top: "conv2"
   blobs_lr: 1
   blobs_lr: 2
   weight_decay: 1
   weight_decay: 0
   convolution_param {
-    num_output: 40
+    num_output: 16
     kernel_size: 3
     weight_filler {
       type: "gaussian"
-      std: 0.01
+      std: 0.1
     }
     bias_filler {
       type: "constant"
@@ -114,20 +142,52 @@ layers {
 }
 
 layers {
-  name: "conv3"
+  name: "conv2_squeeze"
   type: CONVOLUTION
   bottom: "pool2"
+  top: "conv2_squeeze"
+  blobs_lr: 1
+  blobs_lr: 2
+  weight_decay: 1
+  weight_decay: 0
+  convolution_param {
+    num_output: 8
+    kernel_size: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.1
+    }
+    bias_filler {
+      type: "constant"
+      value: 1
+    }
+  }
+}
+layers {
+  name: "relu2_squeeze"
+  type: RELU
+  bottom: "conv2_squeeze"
+  top: "conv2_squeeze"
+}
+
+
+
+
+layers {
+  name: "conv3"
+  type: CONVOLUTION
+  bottom: "conv2_squeeze"
   top: "conv3"
   blobs_lr: 1
   blobs_lr: 2
   weight_decay: 1
   weight_decay: 0
   convolution_param {
-    num_output: 60
+    num_output: 16
     kernel_size: 3
     weight_filler {
       type: "gaussian"
-      std: 0.01
+      std: 0.1
     }
     bias_filler {
       type: "constant"
@@ -161,37 +221,72 @@ layers {
     dropout_ratio: 0.5
   }
 }
+
+#add sequeeze
 layers {
-  name: "f1"
-  type: INNER_PRODUCT
+  name: "conv4"
+  type: CONVOLUTION
   bottom: "pool3"
-  top: "fc1"
+  top: "conv4"
   blobs_lr: 1
   blobs_lr: 2
   weight_decay: 1
   weight_decay: 0
-  inner_product_param {
-    num_output: 120
+  convolution_param {
+    num_output: 16
+    kernel_size: 1
     weight_filler {
       type: "gaussian"
-      std: 0.005
+      std: 0.1
     }
     bias_filler {
       type: "constant"
-      value: 1
+      value: 0
     }
   }
 }
 layers {
-  name: "relu6"
+  name: "relu4"
   type: RELU
-  bottom: "fc1"
-  top: "fc1"
+  bottom: "conv4"
+  top: "conv4"
 }
+
+
+layers {
+  name: "conv5"
+  type: CONVOLUTION
+  bottom: "conv4"
+  top: "conv5"
+  blobs_lr: 1
+  blobs_lr: 2
+  weight_decay: 1
+  weight_decay: 0
+  convolution_param {
+    num_output: 16
+    kernel_size: 3
+    weight_filler {
+      type: "gaussian"
+      std: 0.1
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layers {
+  name: "relu5"
+  type: RELU
+  bottom: "conv5"
+  top: "conv5"
+}
+
+
 layers {
   name: "fc2new"
   type: INNER_PRODUCT
-  bottom: "fc1"
+  bottom: "conv5"
   top: "fc2new"
   blobs_lr: 1
   blobs_lr: 2
@@ -201,7 +296,7 @@ layers {
     num_output: 3
     weight_filler {
       type: "gaussian"
-      std: 0.005
+      std: 0.05
     }
     bias_filler {
       type: "constant"

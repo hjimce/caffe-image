@@ -92,9 +92,9 @@ def writetrainlist(path_root):
 writetrainlist('../headangle/data/train')
 writetrainlist('../headangle/data/val')'''
 
-#spiltdata('../hair/data')
-writetrainlist('../hair/data/train')
-writetrainlist('../hair/data/val')
+spiltdata('../headangle/data')
+writetrainlist('../headangle/data/train')
+writetrainlist('../headangle/data/val')
 
 
 
