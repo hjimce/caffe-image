@@ -57,7 +57,7 @@ def batchclassify(filepath='1'):
 
 
 #predict('1.jpg')
-batchclassify('photo_01_19992')
+batchclassify('photo_03_7397')
 #accurate()
 #testonefile()
 

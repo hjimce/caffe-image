@@ -55,7 +55,7 @@ def getface_images(imgpath):
 	y=int(y1)
 	w=int(x2-x1)
 	h=int(y2-y1)
-	scale=0.
+	scale=0.4
 	miny=max(0,y-scale*h)
 	minx=max(0,x-scale*w)
 	maxy=min(height,y+(1+scale)*h)
@@ -219,5 +219,6 @@ def getface_batch(filepath):
 
 #geteyes_inone_batch('merge5.3_6.3')
 #geteye_batch('merge1~5.1 6.1')
-getface_batch("../headangle/data/val")
+getface_batch("../hair/data/train")
+getface_batch("../hair/data/val")
 #geteye_batch("../mouth/oridata")

@@ -50,17 +50,17 @@ def spiltdata(path_root,valratio=0.1):
 		imgfvals=imgfiles[:nval]
 	#验证数据文件列表
 		for j in imgfvals:
-			if os.path.exists(os.path.join('val',c)) is False:
-				os.makedirs(os.path.join('val',c))
-			newname=os.path.join('val',c)+'/'+j
+			if os.path.exists(os.path.join(path_root+'/'+'val',c)) is False:
+				os.makedirs(os.path.join(path_root+'/'+'val',c))
+			newname=os.path.join(path_root+'/'+'val',c)+'/'+j
 			oldname=os.path.join(path_root,c)+'/'+j
 			shutil.move(oldname,newname)
 	#训练数据文件列表
 		imgftrains=imgfiles[nval:]
 		for j in imgftrains:
-			if os.path.exists(os.path.join('train',c)) is False:
-				os.makedirs(os.path.join('train',c))
-			newname=os.path.join('train',c)+'/'+j
+			if os.path.exists(os.path.join(path_root+'/'+'train',c)) is False:
+				os.makedirs(os.path.join(path_root+'/'+'train',c))
+			newname=os.path.join(path_root+'/'+'train',c)+'/'+j
 			oldname=os.path.join(path_root,c)+'/'+j
 			shutil.move(oldname,newname)
 
@@ -88,9 +88,13 @@ def writetrainlist(path_root):
 
 
 
-#spiltdata('../headangle/data')
-writetrainlist('../gender/data/train')
-writetrainlist('../gender/data/val')
+'''spiltdata('../headangle/data')
+writetrainlist('../headangle/data/train')
+writetrainlist('../headangle/data/val')'''
+
+#spiltdata('../hair/data')
+writetrainlist('../hair/data/train')
+writetrainlist('../hair/data/val')
 
 
 

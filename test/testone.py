@@ -14,7 +14,7 @@ import random
 #根据人脸框bbox，从一张完整图片裁剪出人脸,并保存问文件名cropimgname
 #如果未检测到人脸,那么返回false,否则返回true
 face_detector=dlib.get_frontal_face_detector()
-#caffe.set_mode_gpu()
+caffe.set_mode_gpu()
 def getface(imgpath,cropimgname):
 	bgrImg = cv2.imread(imgpath)
 	if bgrImg is None:
@@ -170,32 +170,8 @@ def testonefile(dataroot='testimage'):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #predict('1.jpg')
-batchclassify('photo_04_15224')
+batchclassify('photo_11_17626')
 #accurate()
 #testonefile()
 
