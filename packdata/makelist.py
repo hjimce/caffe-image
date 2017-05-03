@@ -71,6 +71,9 @@ def writetrainlist(path_root):
 	classify_file=[]
 	for c in classify_temp:
 		classify_file.append(os.path.join(path_root,c))
+	for f in classify_file:
+		imgfiles=GetFileList(f)
+		stdrename(imgfiles)#caffe 文件名不允许有空格
 
 	sorted(classify_file)
 	strlist=''
@@ -92,7 +95,7 @@ def writetrainlist(path_root):
 writetrainlist('../headangle/data/train')
 writetrainlist('../headangle/data/val')'''
 
-spiltdata('../headangle/data')
+#spiltdata('../headangle/data')
 writetrainlist('../headangle/data/train')
 writetrainlist('../headangle/data/val')
 

@@ -4,6 +4,7 @@ import  matplotlib.pyplot as plt
 import  cv2
 import  dlib
 import  os
+from multiprocessing import  Pool
 #根据人脸框bbox，从一张完整图片裁剪出人脸,并保存问文件名cropimgname
 #如果未检测到人脸,那么返回false,否则返回true
 face_detector=dlib.get_frontal_face_detector()
@@ -157,41 +158,15 @@ def geteye_batch(filepath):
 			cv2.imwrite(newname_left,get_imagerect(bgrImg,eyes_rect['left_rect']))
 			newname_right=pickfile+'/'+clasiffy+'/'+'right'+imgpath
 			cv2.imwrite(newname_right,get_imagerect(bgrImg,eyes_rect['right_rect']))
-#两个眼睛合并成一张图片训练
-def geteyes_inone_batch(filepath):
+def crop_face(old_newpath):
+	oldname=old_newpath[0]
+	newname=old_newpath[1]
 
-	pickfile=filepath+'rect'
-	os.mkdir(pickfile)
-	clasiffys=os.listdir(filepath)
-	for clasiffy in clasiffys:
-		imglists=os.listdir(filepath+'/'+clasiffy)
-		for imgpath in imglists:
-			print imgpath
-			oldname=filepath+'/'+clasiffy+'/'+imgpath
-			eyes=geteye_images(oldname)
-			if eyes is None:
-				continue
-			left_rect,right_rect=eyes
-			newpath=pickfile+'/'+clasiffy
-			if os.path.exists(newpath) is False:
-				os.makedirs(newpath)
-			newname=pickfile+'/'+clasiffy+'/'+imgpath
-			nweight=left_rect.shape[1]+right_rect.shape[1]
-			nheight=max(left_rect.shape[0],right_rect.shape[0])
+	face=getface_images(oldname)
+	if face is None:
+		return
+	cv2.imwrite(newname,face)
 
-			maxlenght=max(nweight,nheight)
-			img0 = np.zeros((maxlenght, maxlenght, 3))
-
-
-			left=left_rect.shape
-			img0[(maxlenght * .5 - left[0] * .5):(maxlenght * .5 + left[0] * .5),
-			0:left[1]] =left_rect
-
-			right=right_rect.shape
-			img0[(maxlenght * .5 - right[0] * .5):(maxlenght * .5 + right[0] * .5),
-			left[1]:] =right_rect
-
-			cv2.imwrite(newname,img0)
 
 #一整张人脸图片训练
 def getface_batch(filepath):
@@ -199,19 +174,21 @@ def getface_batch(filepath):
 	pickfile=filepath+'rect'
 	os.mkdir(pickfile)
 	clasiffys=os.listdir(filepath)
+	oldpaths=[]
+	newpaths=[]
 	for clasiffy in clasiffys:
 		imglists=os.listdir(filepath+'/'+clasiffy)
 		for imgpath in imglists:
 			oldname=filepath+'/'+clasiffy+'/'+imgpath
-			face=getface_images(oldname)
-			if face is None:
-				continue
-
 			newpath=pickfile+'/'+clasiffy
 			if os.path.exists(newpath) is False:
 				os.makedirs(newpath)
 			newname_left=pickfile+'/'+clasiffy+'/'+imgpath
-			cv2.imwrite(newname_left,face)
+			oldpaths.append(oldname)
+			newpaths.append(newname_left)
+	pool=Pool()
+	pool.map(crop_face,zip(oldpaths,newpaths))
+
 
 
 
@@ -219,5 +196,5 @@ def getface_batch(filepath):
 
 #geteyes_inone_batch('merge5.3_6.3')
 #geteye_batch('merge1~5.1 6.1')
-getface_batch("../headangle/data")
+getface_batch("../headangle/data2.0")
 #geteye_batch("../mouth/oridata")
