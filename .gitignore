@@ -64,7 +64,8 @@ log/
 *.binaryproto
 *.caffemodel
 *.db
-
+Thumbs.db
+*.solverstate
 
 # Specified for project
 *~
