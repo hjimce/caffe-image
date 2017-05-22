@@ -1,6 +1,6 @@
 import  shutil
 import os
-def cut_val(val_txt="../mutillight/data/val.txt",dataroot='../mutillight/data'):
+def cut_val(val_txt="../mutil_light/data/val.txt",dataroot='../mutil_light/data'):
 	with open(val_txt,'r') as f:
 		for l in f.readlines():
 			oldpath=l.split()[0]
@@ -22,7 +22,7 @@ def cut(train_frontroot='../headangle/data/train/front',front_root='../headangle
 			os.remove(oldpath)
 
 
-cut()
+cut_val()
 
 
 

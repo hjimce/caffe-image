@@ -4,7 +4,7 @@
 
 EXAMPLE=../mutillight/lmdb/
 DATA=../mutillight/lmdb/
-TOOLS=/home/hjimce/tools/caffe/build/tools  
+TOOLS=/home/research/tools/caffe/build/tools
 
 $TOOLS/compute_image_mean $EXAMPLE/train_lmdb \
   $DATA/imagenet_mean.binaryproto

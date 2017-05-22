@@ -57,17 +57,18 @@ def getface_images(imgpath):
 	w=int(x2-x1)
 	h=int(y2-y1)
 	scale=0.4
-	miny=max(0,y-scale*h)
-	minx=max(0,x-scale*w)
-	maxy=min(height,y+(1+scale)*h)
-	maxx=min(weight,x+(1+scale)*w)
+	miny=int(max(0,y-scale*h))
+	minx=int(max(0,x-scale*w))
+	maxy=int(min(height,y+(1+scale)*h))
+	maxx=int(min(weight,x+(1+scale)*w))
 	roi=img[miny:maxy,minx:maxx]
 	rectshape=roi.shape
 	maxlenght=max(rectshape[0],rectshape[1])
 	if maxlenght<20:
 		return  None
 	img0=np.zeros((maxlenght,maxlenght,3))
-	img0[(maxlenght*.5-rectshape[0]*.5):(maxlenght*.5+rectshape[0]*.5),(maxlenght*.5-rectshape[1]*.5):(maxlenght*.5+rectshape[1]*.5)]=roi
+	img0[int(maxlenght*.5-rectshape[0]*.5):int(maxlenght*.5+rectshape[0]*.5),
+	int(maxlenght*.5-rectshape[1]*.5):int(maxlenght*.5+rectshape[1]*.5)]=roi
 	return  img0
 #注意输入rect格式[x1,x2,y1,y2]
 def get_imagerect(bgrImg,rect):
@@ -186,6 +187,8 @@ def getface_batch(filepath):
 			newname_left=pickfile+'/'+clasiffy+'/'+imgpath
 			oldpaths.append(oldname)
 			newpaths.append(newname_left)
+	#for newpath in zip(oldpaths,newpaths):
+	#	crop_face(newpath)
 	pool=Pool()
 	pool.map(crop_face,zip(oldpaths,newpaths))
 
@@ -196,5 +199,5 @@ def getface_batch(filepath):
 
 #geteyes_inone_batch('merge5.3_6.3')
 #geteye_batch('merge1~5.1 6.1')
-getface_batch("../headangle/data2.0")
+getface_batch("../mutil_light/data/val")
 #geteye_batch("../mouth/oridata")

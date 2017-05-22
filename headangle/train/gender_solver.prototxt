@@ -1,6 +1,6 @@
 net: "gender_train_val.prototxt"
-test_iter: 2000
-test_interval:2000
+test_iter: 20000
+test_interval:20000
 base_lr: 0.001
 lr_policy: "step"
 gamma: 0.1
@@ -9,6 +9,6 @@ display: 400
 max_iter:200000 
 momentum: 0.9
 weight_decay: 0.0005
-snapshot: 2000
+snapshot: 20000
 snapshot_prefix: "model/iter"
 solver_mode: GPU

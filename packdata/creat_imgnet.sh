@@ -2,8 +2,8 @@
 # Create the imagenet lmdb inputs
 # N.B. set the path to the imagenet train + val data dirs
 
-OUT=../headangle/lmdb
-DATA=../headangle/data/
+OUT=../mutil_light/lmdb
+DATA=../mutil_light/data/
 
 RESIZE_HEIGHT=45
 RESIZE_WIDTH=45
@@ -15,7 +15,7 @@ RESIZE_WIDTH=45
 
 TRAIN_DATA_ROOT=./
 VAL_DATA_ROOT=./
-TOOLS=/home/hjimce/tools/caffe/build/tools
+TOOLS=/home/research/tools/caffe/build/tools
 
 # Set RESIZE=true to resize the images to 256x256. Leave as false if images have
 # already been resized using another tool.

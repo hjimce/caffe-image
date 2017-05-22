@@ -57,14 +57,13 @@ log/
 .ckpt
 *.JPEG
 *.png
-hair/
 .idea/
 *.mdb
 *.JPG
 *.prototxt
 *.binaryproto
 *.caffemodel
-mouth/
+*.db
 
 
 # Specified for project
