@@ -2,11 +2,11 @@
 # Create the imagenet lmdb inputs
 # N.B. set the path to the imagenet train + val data dirs
 
-OUT=../mutil_light/lmdb
-DATA=../mutil_light/data/
+OUT=../faceshape/lmdb
+DATA=../faceshape/data/
 
-RESIZE_HEIGHT=45
-RESIZE_WIDTH=45
+RESIZE_HEIGHT=90
+RESIZE_WIDTH=90
 
 
 
@@ -15,7 +15,7 @@ RESIZE_WIDTH=45
 
 TRAIN_DATA_ROOT=./
 VAL_DATA_ROOT=./
-TOOLS=/home/research/tools/caffe/build/tools
+TOOLS=../caffe/build/tools
 
 # Set RESIZE=true to resize the images to 256x256. Leave as false if images have
 # already been resized using another tool.

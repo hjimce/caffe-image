@@ -199,5 +199,7 @@ def getface_batch(filepath):
 
 #geteyes_inone_batch('merge5.3_6.3')
 #geteye_batch('merge1~5.1 6.1')
-getface_batch("../mutil_light/data/val")
+getface_batch("../faceshape/data/val")
+
+
 #geteye_batch("../mouth/oridata")

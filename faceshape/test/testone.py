@@ -83,46 +83,40 @@ def loadmodel(pretrained_model='train.caffemodel',network='deploy.prototxt',size
 					   image_dims=(size, size))
 	return  gender_net
 
+
+model=loadmodel('model2.0/train.caffemodel','model2.0/net.prototxt',90)
 #用于测试精度
-def accurate(filepatht='stdtest'):
+def accurate(filepatht='val'):
 	gender_listc=['7','10','9','8','3','4','1','6','5','2']
 
 
-	model=loadmodel()
 
 	error_count=0
 	all_count=0
 	for race in gender_listc:
+		pickpatch="val_pick/"+race
+		os.makedirs(pickpatch)
 		filepath=filepatht+'/'+race
 		imglists=os.listdir(filepath)
 		random.shuffle(imglists)
 		for imgpath in imglists:
 			[[prace,racepro,cropimg]]=predict(model,[filepath+'/'+imgpath])
 			if prace is not None:
+
 				all_count+=1
 				if prace!=race:
-					resized_image = cv2.resize(cv2.imread(cropimg), (500, 500))
+					shutil.copy(filepath+'/'+imgpath,pickpatch+'/pre:'+str(prace)+"_id"+str(all_count)+'.jpg')
+					'''resized_image = cv2.resize(cv2.imread(cropimg), (500, 500))
 					cv2.imshow('pre:'+prace+'\t'+'ac:'+race,resized_image)
 					cv2.moveWindow('pre:'+prace+'\t'+'ac:'+race, 100, 100);
-					cv2.waitKey(0)
+					cv2.waitKey(0)'''
 					error_count+=1
 			else:
 				print 'detect no face'
 	print 'accurate:',1-error_count/float(all_count)
-model=loadmodel('model2.0/train.caffemodel','model2.0/net.prototxt',90)
-
-def oneclassify(root):
-	filepath,pickfile,imgpath=root
-	print root
 
 
-	[[race,_,_]]=predict(model,[filepath+'/'+imgpath])
-	if race is not None:
-		newpath=pickfile+'/'+race
-		if os.path.exists(newpath) is False:
-			os.mkdir(newpath)
-		newname=newpath+'/'+imgpath
-		shutil.copy(filepath+'/'+imgpath,newname)
+
 
 
 
@@ -144,9 +138,11 @@ def batchclassify(filepath='test'):
 
 
 
+
+
 #predict('1.jpg')
-batchclassify('photo12_front')
-#accurate()
+#batchclassify('photo8_front')
+accurate()
 #testonefile()
 
 

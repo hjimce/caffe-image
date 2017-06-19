@@ -114,7 +114,7 @@ def disp_results(fig, ax1, ax2, loss_iterations, losses, accuracy_iterations, ac
     plt.legend(loc='lower right')
 
 
-main(['log.txt','log_old.txt'])
+main(['log.txt','log13.txt'])
 
 #main(['log_old.txt'])
 
